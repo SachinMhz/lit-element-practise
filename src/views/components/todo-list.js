@@ -1,10 +1,11 @@
+import "@vaadin/vaadin-checkbox";
 import { connect } from "pwa-helpers";
 import { html } from "@polymer/lit-element";
 
-import { BaseView } from "./base-view";
-import { store } from "../redux/store";
-import { updateTodoStatus } from "../redux/actions.js";
-import { getVisibleTodosSelector } from "../redux/reducer";
+import { BaseView } from "../base-view";
+import { store } from "../../redux/store";
+import { updateTodoStatus } from "../../redux/actions.js";
+import { getVisibleTodosSelector } from "../../redux/reducer";
 
 class TodoList extends connect(store)(BaseView) {
   static get properties() {

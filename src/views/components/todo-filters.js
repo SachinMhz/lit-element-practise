@@ -3,10 +3,10 @@ import { html } from "@polymer/lit-element";
 import "@vaadin/vaadin-radio-button/vaadin-radio-group";
 import "@vaadin/vaadin-radio-button/vaadin-radio-button";
 
-import { BaseView } from "./base-view";
-import { store } from "../redux/store.js";
-import { VisibilityFilters } from "../redux/reducer";
-import { updateFilter, clearCompleted } from "../redux/actions.js";
+import { BaseView } from "../base-view";
+import { store } from "../../redux/store.js";
+import { VisibilityFilters } from "../../redux/reducer";
+import { updateFilter, clearCompleted } from "../../redux/actions.js";
 
 class TodoFilters extends connect(store)(BaseView) {
   static get properties() {
