@@ -6,22 +6,17 @@ import { html } from "@polymer/lit-element";
 import "@vaadin/vaadin-radio-button/vaadin-radio-group";
 import "@vaadin/vaadin-radio-button/vaadin-radio-button";
 
+import "./todo-list";
 import "./todo-filters";
 import { BaseView } from "./base-view";
 import { store } from "../redux/store.js";
+import { addTodo } from "../redux/actions.js";
 import { getVisibleTodosSelector } from "../redux/reducer";
-import { addTodo, updateTodoStatus } from "../redux/actions.js";
-
 class TodoView extends connect(store)(BaseView) {
   static get properties() {
     return {
-      todos: { type: Array },
       task: { type: String },
     };
-  }
-
-  stateChanged(state) {
-    this.todos = getVisibleTodosSelector(state);
   }
 
   addTodo() {
@@ -37,25 +32,8 @@ class TodoView extends connect(store)(BaseView) {
     }
   }
 
-  updateTask(e) {
+  onChangeTask(e) {
     this.task = e.target.value;
-  }
-
-  updateTodoStatus(updatedTodo, complete) {
-    store.dispatch(updateTodoStatus(updatedTodo, complete));
-  }
-
-  renderTodoItem(todo) {
-    return html`
-      <div class="todo-item">
-        <vaadin-checkbox
-          ?checked="${todo.complete}"
-          @change="${(e) => this.updateTodoStatus(todo, e.target.checked)}"
-        >
-          ${todo.task}
-        </vaadin-checkbox>
-      </div>
-    `;
   }
 
   render() {
@@ -81,12 +59,12 @@ class TodoView extends connect(store)(BaseView) {
           margin-top: calc(4 * var(--spacing));
         }
       </style>
-      
+
       <div class="input-layout" @keyup="${this.shortcutListener}">
         <vaadin-text-field
           placeholder="Task"
           value="${this.task || ""}"
-          @change="${this.updateTask}"
+          @change="${this.onChangeTask}"
         >
         </vaadin-text-field>
 
@@ -94,9 +72,8 @@ class TodoView extends connect(store)(BaseView) {
           Add Todo
         </vaadin-button>
       </div>
-      <div class="todos-list">
-        ${this.todos.map((todo) => this.renderTodoItem(todo))}
-      </div>
+
+      <todo-list></todo-list>
 
       <todo-filters></todo-filters>
     `;
