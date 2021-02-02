@@ -16,13 +16,16 @@ class BlogUpdate extends connect(store)(BaseView) {
 
   constructor() {
     super();
-    this.blog = { title: "", description: "", image: "" };
   }
 
   stateChanged(state) {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
     this.blog = state.blogs.find((blog) => blog.id == id);
+
+    this.title = this.blog.title;
+    this.description = this.blog.description;
+    this.image = this.blog.image;
   }
 
   titleChange(e) {
@@ -36,10 +39,15 @@ class BlogUpdate extends connect(store)(BaseView) {
   }
 
   updateBlog(e) {
-    if (this.blog.title && this.blog.description) {
-      store.dispatch(
-        updateBlog(this.blog.id, this.title, this.description, this.image)
-      );
+    e.preventDefault();
+    if (this.title && this.description) {
+      let blog = {
+        id: this.blog.id,
+        title: this.title,
+        description: this.description,
+        image: this.image,
+      };
+      store.dispatch(updateBlog(blog));
     }
   }
 

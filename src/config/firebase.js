@@ -1,21 +1,21 @@
 import firebase from "firebase";
 
-const retriveItems = (path) => {
+const _get = (path) => {
   return new Promise(function (resolve, reject) {
     console.log("retriving from db...");
     let DataRef = firebase.database().ref(path);
     DataRef.on("value", (snapshot) => {
       let data_object = snapshot.val(); //object of objects
       let data_array = Object.values(data_object); //array of objects
-      resolve(data_array);
-      if (data_array === null) {
+      if (!data_array) {
         reject("Something wrong with database");
       }
+      resolve(data_array);
     });
   });
 };
 
-const addItem = async (data, path) => {
+const _post = async (path, data) => {
   console.log("adding to db...");
   let ItemsRef = firebase.database().ref(path);
   let newItemRef = ItemsRef.push();
@@ -26,24 +26,24 @@ const addItem = async (data, path) => {
   });
 };
 
-const updateItem = async (id, data, path) => {
+const _put = async (path, data) => {
   console.log("updating to db...");
-  let dataPath = path + "/" + id;
+  let dataPath = path + "/" + data.id;
   var itemRef = firebase.database().ref(dataPath);
   await itemRef.update(data);
 };
 
-const deleteItem = async (id, path) => {
+const _delete = async (path, data) => {
   console.log("deleting form db...");
-  let dataPath = path + "/" + id;
+  let dataPath = path + "/" + data.id;
   await firebase.database().ref(dataPath).remove();
 };
 
 const Fire = {
-  addItem,
-  retriveItems,
-  updateItem,
-  deleteItem,
+  _get,
+  _post,
+  _put,
+  _delete,
 };
 
 export default Fire;

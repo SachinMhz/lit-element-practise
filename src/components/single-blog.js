@@ -1,8 +1,8 @@
 import { html } from "@polymer/lit-element";
 
+import { store } from "../redux/store";
 import { deleteBlog } from "../redux/actions";
 import { BaseView } from "../components/base-view";
-import { store } from "../redux/store";
 
 class SingleBlog extends BaseView {
   static get properties() {
@@ -12,17 +12,15 @@ class SingleBlog extends BaseView {
   }
 
   deleteBlog(e) {
-    const firebase = window.firebase;
-    console.log(firebase);
     e.preventDefault();
-    // store.dispatch(deleteBlog(this.blog.id));
-    console.log("delete clicked");
+    store.dispatch(deleteBlog(this.blog));
   }
+
   editBlog(e) {
     e.preventDefault();
     window.location.href = "http://localhost:8080/update?id=" + this.blog.id;
-    console.log("update clicked");
   }
+  
   render() {
     return html`
       <a href=${`/blog?id=${this.blog.id}`}>

@@ -2,9 +2,8 @@ import { html } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
 
 import { store } from "../redux/store.js";
-import { addBlog, addToDo } from "../redux/actions.js";
+import { addBlog } from "../redux/actions.js";
 import { BaseView } from "../components/base-view";
-import Fire from "../config/firebase.js";
 
 class BlogCreate extends connect(store)(BaseView) {
   static get properties() {
@@ -33,11 +32,14 @@ class BlogCreate extends connect(store)(BaseView) {
   }
 
   addBlog(e) {
-    Fire.addItem({ id: "asdfadf" }, "lit-blog");
     e.preventDefault();
-    // console.log("pressed", this.title, this.description, e);
     if (this.title && this.description) {
-      store.dispatch(addBlog(this.title, this.image, this.description));
+      let blog = {
+        title: this.title,
+        description: this.description,
+        image: this.image,
+      };
+      store.dispatch(addBlog(blog));
       this.title = "";
       this.image = "";
       this.description = "";
