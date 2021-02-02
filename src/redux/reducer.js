@@ -1,68 +1,30 @@
-import { createSelector } from 'reselect';
-
-import {
-  ADD_TODO,
-  UPDATE_FILTER,
-  UPDATE_TODO_STATUS,
-  CLEAR_COMPLETED,
-} from "./actions.js";
-
-export const VisibilityFilters = {
-  SHOW_ALL: "All",
-  SHOW_ACTIVE: "Active",
-  SHOW_COMPLETED: "Completed",
-};
+import { ADD_BLOG, DELETE_BLOG, UPDATE_BLOG } from "./actions.js";
 
 const INITIAL_STATE = {
-  todos: [],
-  filter: VisibilityFilters.SHOW_ALL,
+  blogs: [],
 };
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_TODO:
+    case ADD_BLOG:
       return {
         ...state,
-        todos: [...state.todos, action.todo],
+        blogs: [...state.blogs, action.blog],
       };
-    case UPDATE_TODO_STATUS:
+    case DELETE_BLOG:
       return {
         ...state,
-        todos: state.todos.map((todo) =>
-          todo.id === action.todo.id
-            ? { ...action.todo, complete: action.complete }
-            : todo
-        ),
+        blogs: state.blogs.filter((blog) => blog.id !== action.id),
       };
-    case UPDATE_FILTER:
+    case UPDATE_BLOG:
       return {
         ...state,
-        filter: action.filter,
-      };
-    case CLEAR_COMPLETED:
-      return {
-        ...state,
-        todos: state.todos.filter((todo) => !todo.complete),
+        blogs: state.blogs.map((blog) => {
+          if (blog.id == action.id) return action.blog;
+          return blog;
+        }),
       };
     default:
       return state;
   }
 };
-
-const getTodosSelector = (state) => state.todos;
-const getFilterSelector = (state) => state.filter;
-
-export const getVisibleTodosSelector = createSelector(
-  getTodosSelector,
-  getFilterSelector,
-  (todos, filter) => {
-    switch (filter) {
-      case VisibilityFilters.SHOW_COMPLETED:
-        return todos.filter((todo) => todo.complete);
-      case VisibilityFilters.SHOW_ACTIVE:
-        return todos.filter((todo) => !todo.complete);
-      default:
-        return todos;
-    }
-  }
-);

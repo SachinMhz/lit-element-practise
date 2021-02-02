@@ -1,8 +1,9 @@
-import { createStore } from "redux";
+import thunk from "redux-thunk";
+import { createStore, applyMiddleware, compose } from "redux";
 
 import { reducer } from "./reducer.js";
 
-const STORAGE_KEY = "__todo_app__";
+const STORAGE_KEY = "__blog_app__";
 
 const saveState = (state) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -16,7 +17,10 @@ const loadState = () => {
 export const store = createStore(
   reducer,
   loadState(),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
 );
 
 store.subscribe(() => {

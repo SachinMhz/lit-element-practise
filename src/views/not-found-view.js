@@ -1,5 +1,5 @@
 import { html } from "lit-element";
-import { BaseView } from "./base-view.js";
+import { BaseView } from "../components/base-view.js";
 
 class NotFoundView extends BaseView {
   render() {
