@@ -11,6 +11,7 @@ class BlogUpdate extends connect(store)(BaseView) {
       title: { type: String },
       image: { type: String },
       description: { type: String },
+      updateState: { type: Boolean },
     };
   }
 
@@ -21,7 +22,8 @@ class BlogUpdate extends connect(store)(BaseView) {
   stateChanged(state) {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
-    this.blog = state.blogs.find((blog) => blog.id == id);
+    this.updateState = state.blog.updateLoading;
+    this.blog = state.blog.blogs.find((blog) => blog.id == id);
 
     this.title = this.blog.title;
     this.description = this.blog.description;
@@ -47,7 +49,9 @@ class BlogUpdate extends connect(store)(BaseView) {
         description: this.description,
         image: this.image,
       };
-      store.dispatch(updateBlog(blog));
+      store.dispatch(updateBlog(blog)).then(() => {
+        window.location.href = "http://localhost:8080/blogs";
+      });
     }
   }
 
@@ -82,7 +86,11 @@ class BlogUpdate extends connect(store)(BaseView) {
         >
 ${this.blog.description}</textarea
         ><br /><br />
-        <input value="UPDATE" type="submit" @click=${this.updateBlog} />
+        <input
+          value=${this.updateState ? "Updating..." : "Update"}
+          type="submit"
+          @click=${this.updateBlog}
+        />
       </form>
     </div> `;
   }

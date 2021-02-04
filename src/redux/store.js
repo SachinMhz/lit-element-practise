@@ -1,7 +1,7 @@
 import thunk from "redux-thunk";
 import { createStore, applyMiddleware, compose } from "redux";
 
-import { reducer } from "./reducer.js";
+import reducer from "./reducer.js";
 
 const STORAGE_KEY = "__blog_app__";
 

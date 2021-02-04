@@ -12,7 +12,7 @@ class BlogDetail extends connect(store)(BaseView) {
   stateChanged(state) {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
-    this.blog = state.blogs.find((blog) => blog.id == id);
+    this.blog = state.blog.blogs.find((blog) => blog.id == id);
   }
 
   render() {

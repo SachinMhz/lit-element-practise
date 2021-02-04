@@ -20,7 +20,7 @@ class BlogsView extends connect(store)(BaseView) {
   }
 
   stateChanged(state) {
-    this.blogs = state.blogs;
+    this.blogs = state.blog.blogs;
   }
 
   render() {

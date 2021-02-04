@@ -5,12 +5,22 @@ import { store } from "../redux/store.js";
 import { addBlog } from "../redux/actions.js";
 import { BaseView } from "../components/base-view";
 
+import moment from "moment";
+
+console.log("/*---------------------------*/");
+let now = moment();
+console.log("now", now);
+console.log("now.format('DD MMM YYYY')", now.format("DD MMM YYYY"));
+console.log("/*---------------------------*/");
+
 class BlogCreate extends connect(store)(BaseView) {
   static get properties() {
     return {
       title: { type: String },
       image: { type: String },
-      Description: { type: String },
+      description: { type: String },
+      addState: { type: Boolean },
+      createDate: { type: String },
     };
   }
 
@@ -19,8 +29,12 @@ class BlogCreate extends connect(store)(BaseView) {
     this.title = "";
     this.description = "";
     this.image = "";
+    this.createDate = "";
   }
 
+  stateChanged(state) {
+    this.addState = state.blog.addLoading;
+  }
   titleChange(e) {
     this.title = e.target.value;
   }
@@ -38,11 +52,11 @@ class BlogCreate extends connect(store)(BaseView) {
         title: this.title,
         description: this.description,
         image: this.image,
+        createDate: moment().format("Do MMM YYYY"),
       };
-      store.dispatch(addBlog(blog));
-      this.title = "";
-      this.image = "";
-      this.description = "";
+      store.dispatch(addBlog(blog)).then(() => {
+        window.location.href = "http://localhost:8080/blogs";
+      });
     }
   }
 
@@ -77,7 +91,11 @@ class BlogCreate extends connect(store)(BaseView) {
         >
 ${this.description}</textarea
         ><br /><br />
-        <input value="ADD" type="submit" @click=${this.addBlog} />
+        <input
+          value=${this.addState ? "Adding..." : "Add"}
+          type="submit"
+          @click=${this.addBlog}
+        />
       </form>
     </div> `;
   }

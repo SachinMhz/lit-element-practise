@@ -18,7 +18,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-
 window.addEventListener("load", () => {
   initRouter();
 });
@@ -59,6 +58,20 @@ function initRouter() {
     //     },
     //   ],
     // },
+    {
+      path: "/",
+      component: "login-view",
+      action: async () => {
+        await import("./views/login-view");
+      },
+    },
+    {
+      path: "/sign-in",
+      component: "signin-view",
+      action: async () => {
+        await import("./views/signin-view");
+      },
+    },
     {
       path: "/blogs",
       component: "blogs-view",

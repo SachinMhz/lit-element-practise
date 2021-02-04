@@ -39,11 +39,62 @@ const _delete = async (path, data) => {
   await firebase.database().ref(dataPath).remove();
 };
 
+const _signin = (email, password) => {
+  return new Promise(function (resolve, reject) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        var user = userCredential.user;
+        resolve(user);
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        reject(errorMessage);
+      });
+  });
+};
+
+const _login = (email, password) => {
+  return new Promise(function (resolve, reject) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        var user = userCredential.user;
+        resolve(user);
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        reject(errorMessage);
+      });
+  });
+};
+
+const _signout = () => {
+  return new Promise(function (resolve, reject) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        resolve(true);
+      })
+      .catch((error) => {
+        reject("Failed to log out");
+      });
+  });
+};
+
 const Fire = {
   _get,
   _post,
   _put,
   _delete,
+  _login,
+  _signin,
+  _signout,
 };
 
 export default Fire;
