@@ -1,6 +1,10 @@
 import firebase from "firebase";
 import { Router } from "@vaadin/router";
 
+import '@material/mwc-textfield';
+import '@material/mwc-icon';
+import '@material/mwc-button';
+
 import "./styles.css";
 import "./views/blogs-view";
 import "./components/nav-bar";
@@ -25,39 +29,6 @@ window.addEventListener("load", () => {
 function initRouter() {
   const router = new Router(document.querySelector("main"));
   router.setRoutes([
-    // {
-    //   path: "/",
-    //   component: "blogs-view",
-    //   children: [
-    //     {
-    //       path: "blogs",
-    //       component: "blogs-view",
-    //       action: async () => {
-    //         await import("./views/blogs-view");
-    //       },
-    //       children: [
-    //         {
-    //           path: "",
-    //           redirect: "/blogs",
-    //         },
-    //         {
-    //           path: "create",
-    //           component: "blog-create-view",
-    //           action: async () => {
-    //             await import("./views/blog-create-view");
-    //           },
-    //         },
-    //         {
-    //           path: "/:id",
-    //           component: "blog-detail-view",
-    //           action: async () => {
-    //             await import("./views/blog-detail-view");
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
     {
       path: "/",
       component: "login-view",

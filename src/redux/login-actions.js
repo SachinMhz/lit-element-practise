@@ -12,22 +12,25 @@ export const login = (email, password) => async (dispatch) => {
 
     let user = await Fire._login(email, password);
     dispatch({ type: LOGIN_SUCCESS, user });
+
+    return Promise.resolve(user);
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, error });
-    console.log("login error", error);
+    return Promise.reject(error);
   }
 };
 
 export const signin = (email, password, name) => async (dispatch) => {
   try {
-    console.log("tryinh")
     dispatch({ type: LOGGING_IN });
 
     let user = await Fire._signin(email, password, name);
     dispatch({ type: LOGIN_SUCCESS, user });
+    
+    return Promise.resolve(user);
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, error });
-    console.log("login error", error);
+    return Promise.reject(error);
   }
 };
 

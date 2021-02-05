@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   user: null,
   loginLoading: false,
   loginError: null,
+  signinError: null,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -25,6 +26,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         loginLoading: false,
         user: action.user,
+        loginError: null,
       };
     case LOGIN_FAIL:
       return {
@@ -35,9 +37,7 @@ const reducer = (state = INITIAL_STATE, action) => {
 
     case LOGOUT_SUCCESS:
       return {
-        ...state,
-        user: null,
-        error: null,
+        ...INITIAL_STATE
       };
     default:
       return state;

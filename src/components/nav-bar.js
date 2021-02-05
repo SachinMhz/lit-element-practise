@@ -1,11 +1,10 @@
-import { html } from "lit-element";
+import { html, LitElement } from "lit-element";
 import { connect } from "pwa-helpers";
 
 import { store } from "../redux/store.js";
 import { logout } from "../redux/login-actions.js";
-import { BaseView } from "../components/base-view.js";
 
-class NavBar extends connect(store)(BaseView) {
+class NavBar extends connect(store)(LitElement) {
   static get properties() {
     return {
       isLoggedIn: {
