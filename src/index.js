@@ -1,9 +1,10 @@
 import firebase from "firebase";
 import { Router } from "@vaadin/router";
 
-import '@material/mwc-textfield';
-import '@material/mwc-icon';
-import '@material/mwc-button';
+import "@material/mwc-icon";
+import "@material/mwc-button";
+import "@material/mwc-textarea";
+import "@material/mwc-textfield";
 
 import "./styles.css";
 import "./views/blogs-view";

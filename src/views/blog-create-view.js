@@ -6,13 +6,6 @@ import { addBlog } from "../redux/actions.js";
 import { BaseView } from "../components/base-view";
 
 import moment from "moment";
-
-console.log("/*---------------------------*/");
-let now = moment();
-console.log("now", now);
-console.log("now.format('DD MMM YYYY')", now.format("DD MMM YYYY"));
-console.log("/*---------------------------*/");
-
 class BlogCreate extends connect(store)(BaseView) {
   static get properties() {
     return {
@@ -35,6 +28,7 @@ class BlogCreate extends connect(store)(BaseView) {
   stateChanged(state) {
     this.addState = state.blog.addLoading;
   }
+
   titleChange(e) {
     this.title = e.target.value;
   }
@@ -62,41 +56,85 @@ class BlogCreate extends connect(store)(BaseView) {
 
   render() {
     return html`<div>
-      <h2>Create a new Blog</h2>
-      <form action="">
-        <label for="title">Title:</label><br />
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value=${this.title}
-          @keyup=${this.titleChange}
-        /><br />
-        <label for="image">Image URL:</label><br />
-        <input
-          type="text"
-          id="image"
-          name="image"
-          value=${this.image}
-          @keyup=${this.imageChange}
-        /><br />
-        <label for="blog">Description:</label><br />
-        <textarea
-          type="text"
-          id="blog"
-          name="blog"
-          rows="16"
-          cols="64"
-          @keyup=${this.descriptionChange}
-        >
-${this.description}</textarea
-        ><br /><br />
-        <input
-          value=${this.addState ? "Adding..." : "Add"}
-          type="submit"
-          @click=${this.addBlog}
-        />
-      </form>
+      <style>
+        mwc-textfield {
+          --mdc-theme-primary: rgb(42, 52, 67);
+        }
+        mwc-textarea {
+          --mdc-theme-primary: rgb(42, 52, 67);
+        }
+        mwc-button {
+          --mdc-theme-primary: rgb(42, 52, 67);
+          --mdc-theme-on-primary: white;
+        }
+        .wrapper {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+        .container {
+          display: flex;
+          width: 40vw;
+          min-width: 300px;
+          align-items: center;
+          flex-direction: column;
+        }
+        .textfield {
+          width: 100%;
+          padding: 10px 0;
+        }
+        .textarea {
+          width: 100%;
+          padding: 10px 0;
+        }
+        .button {
+          margin-top: 15px;
+          width: 100%;
+        }
+      </style>
+      <div class="wrapper">
+        <h1>Create a new Blog</h1>
+        <div class="container">
+          <mwc-textfield
+            class="textfield"
+            required
+            outlined
+            label="Title"
+            icon="title"
+            value=${this.title}
+            placeholder="example@gmail.com"
+            @keyup=${this.titleChange}
+          ></mwc-textfield>
+          <mwc-textfield
+            class="textfield"
+            outlined
+            helperPersistent
+            label="Image"
+            icon="image"
+            value=${this.image}
+            placeholder="example@gmail.com"
+            @keyup=${this.imageChange}
+          ></mwc-textfield>
+          <mwc-textarea
+            class="textfield"
+            outlined
+            rows="8"
+            label="Description"
+            icon="vpn_key"
+            value=${this.description}
+            type="password"
+            @keyup=${this.descriptionChange}
+          ></mwc-textarea>
+          ${this.error ? html`<div class="error">${this.error}</div>` : null}
+          <mwc-button
+            class="button"
+            ?disabled=${this.title ? false : true}
+            raised
+            label=${this.addState ? "Creating ..." : "Create"}
+            @click=${this.addBlog}
+          ></mwc-button>
+        </div>
+      </div>
     </div> `;
   }
 }

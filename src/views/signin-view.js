@@ -50,10 +50,10 @@ class SignInView extends connect(store)(BaseView) {
     return html`
       <style>
         mwc-textfield {
-          --mdc-theme-primary: green;
+          --mdc-theme-primary: rgb(42, 52, 67);
         }
         mwc-button {
-          --mdc-theme-primary: green;
+          --mdc-theme-primary: rgb(42, 52, 67);
           --mdc-theme-on-primary: white;
         }
         .login-wrapper {

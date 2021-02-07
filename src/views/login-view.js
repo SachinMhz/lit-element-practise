@@ -17,7 +17,7 @@ class LoginView extends connect(store)(LitElement) {
   constructor() {
     super();
     this.email = "admin@gmail.com";
-    this.password = "admin132";
+    this.password = "admin123";
   }
 
   stateChanged(state) {
@@ -47,10 +47,10 @@ class LoginView extends connect(store)(LitElement) {
     return html`
       <style>
         mwc-textfield {
-          --mdc-theme-primary: green;
+          --mdc-theme-primary: rgb(42, 52, 67);
         }
         mwc-button {
-          --mdc-theme-primary: green;
+          --mdc-theme-primary: rgb(42, 52, 67);
           --mdc-theme-on-primary: white;
         }
         .login-wrapper {
