@@ -24,6 +24,28 @@ class SingleBlog extends BaseView {
 
   render() {
     return html`
+      <style>
+        a {
+          text-decoration: none;
+          color: black;
+        }
+        mwc-button {
+          --mdc-theme-primary: rgb(42, 52, 67);
+          --mdc-theme-on-primary: white;
+        }
+        .wrapper {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+        .container {
+          display: flex;
+          width: 40vw;
+          min-width: 300px;
+          align-items: center;
+          flex-direction: column;
+        }
+      </style>
       <a href=${`/blog?id=${this.blog.id}`}>
         <div
           class="single-blog"
@@ -53,8 +75,18 @@ class SingleBlog extends BaseView {
               />
             </div>
           </div>
-          <button @click=${this.editBlog}>Edit</button>
-          <button @click=${this.deleteBlog}>Delete</button>
+          <mwc-button
+            class="button"
+            raised
+            label="Edit"
+            @click=${this.editBlog}
+          ></mwc-button>
+          <mwc-button
+            class="button"
+            raised
+            label="Delete"
+            @click=${this.deleteBlog}
+          ></mwc-button>
         </div>
       </a>
     `;
