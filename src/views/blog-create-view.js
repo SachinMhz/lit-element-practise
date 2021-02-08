@@ -1,12 +1,13 @@
-import { html } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
+import { html, LitElement } from "lit-element";
 
 import { store } from "../redux/store.js";
 import { addBlog } from "../redux/actions.js";
-import { BaseView } from "../components/base-view";
 
 import moment from "moment";
-class BlogCreate extends connect(store)(BaseView) {
+import { Router } from "@vaadin/router";
+import { ENDPOINT } from "../constants/endpoints.js";
+class BlogCreate extends connect(store)(LitElement) {
   static get properties() {
     return {
       title: { type: String },
@@ -49,7 +50,7 @@ class BlogCreate extends connect(store)(BaseView) {
         createDate: moment().format("Do MMM YYYY"),
       };
       store.dispatch(addBlog(blog)).then(() => {
-        window.location.href = "http://localhost:8080/blogs";
+        Router.go(ENDPOINT.BLOG_LIST);
       });
     }
   }

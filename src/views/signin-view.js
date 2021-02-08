@@ -1,11 +1,12 @@
-import { html } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { signin } from "../redux/login-actions.js";
-import { BaseView } from "../components/base-view";
+import { ENDPOINT } from "../constants/endpoints.js";
 
-class SignInView extends connect(store)(BaseView) {
+class SignInView extends connect(store)(LitElement) {
   static get properties() {
     return {
       name: { type: String },
@@ -25,7 +26,7 @@ class SignInView extends connect(store)(BaseView) {
   stateChanged(state) {
     this.error = state.login.loginError;
     if (state.login.user) {
-      window.location.href = "http://localhost:8080/blogs";
+      Router.go(ENDPOINT.BLOG_LIST);
     }
   }
   nameChange(e) {

@@ -1,10 +1,9 @@
-import { html } from "@polymer/lit-element";
+import { html, LitElement } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
 
 import { store } from "../redux/store";
-import { BaseView } from "../components/base-view";
 
-class BlogDetail extends connect(store)(BaseView) {
+class BlogDetail extends connect(store)(LitElement) {
   constructor() {
     super();
   }

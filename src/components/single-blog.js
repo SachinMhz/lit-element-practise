@@ -1,10 +1,11 @@
-import { html } from "@polymer/lit-element";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
 import { deleteBlog, fetchBlog } from "../redux/actions";
-import { BaseView } from "../components/base-view";
+import { ENDPOINT } from "../constants/endpoints";
 
-class SingleBlog extends BaseView {
+class SingleBlog extends LitElement {
   static get properties() {
     return {
       blog: { type: Object },
@@ -19,7 +20,7 @@ class SingleBlog extends BaseView {
 
   editBlog(e) {
     e.preventDefault();
-    window.location.href = "http://localhost:8080/update?id=" + this.blog.id;
+    Router.go(ENDPOINT.UPDATE + "?id=" + this.blog.id);
   }
 
   render() {

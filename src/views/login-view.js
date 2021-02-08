@@ -1,8 +1,10 @@
-import { html, LitElement } from "@polymer/lit-element";
+import { Router } from "@vaadin/router";
 import { connect } from "pwa-helpers";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { login } from "../redux/login-actions.js";
+import { ENDPOINT } from "../constants/endpoints.js";
 
 class LoginView extends connect(store)(LitElement) {
   static get properties() {
@@ -24,7 +26,7 @@ class LoginView extends connect(store)(LitElement) {
     this.error = state.login.loginError;
     this.loginStatus = state.login.loginLoading;
     if (state.login.user) {
-      window.location.href = "http://localhost:8080/blogs";
+      Router.go(ENDPOINT.BLOG_LIST);
     }
   }
   emailChange(e) {

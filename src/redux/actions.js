@@ -1,5 +1,5 @@
 import Fire from "../config/firebase";
-import { ENDPOINT } from "../constants";
+import { ENDPOINT } from "../constants/endpoints";
 
 export const FETCHING_BLOG = "FETCHING_BLOG";
 export const FETCH_BLOG_FAIL = "FETCH_BLOG_FAIL";
@@ -21,7 +21,7 @@ export const fetchBlog = () => async (dispatch) => {
   try {
     dispatch({ type: FETCHING_BLOG });
 
-    let blogs = await Fire._get(ENDPOINT.BLOG);
+    let blogs = await Fire._get(ENDPOINT.BLOG_LIST);
     dispatch({ type: FETCH_BLOG_SUCCESS, blogs });
   } catch (error) {
     dispatch({ type: FETCH_BLOG_FAIL });
@@ -33,7 +33,7 @@ export const addBlog = (blog) => async (dispatch) => {
   try {
     dispatch({ type: ADDING_BLOG });
 
-    await Fire._post(ENDPOINT.BLOG, blog);
+    await Fire._post(ENDPOINT.BLOG_LIST, blog);
     dispatch({ type: ADD_BLOG_SUCCESS });
   } catch (error) {
     dispatch({ type: ADD_BLOG_FAIL });
@@ -45,7 +45,7 @@ export const deleteBlog = (blog) => async (dispatch) => {
   try {
     dispatch({ type: DELETING_BLOG });
 
-    await Fire._delete(ENDPOINT.BLOG, blog);
+    await Fire._delete(ENDPOINT.BLOG_LIST, blog);
     dispatch({ type: DELETE_BLOG_SUCCESS });
   } catch (error) {
     dispatch({ type: DELETE_BLOG_FAIL });
@@ -57,7 +57,7 @@ export const updateBlog = (blog) => async (dispatch) => {
   try {
     dispatch({ type: UPDATING_BLOG });
 
-    await Fire._put(ENDPOINT.BLOG, blog);
+    await Fire._put(ENDPOINT.BLOG_LIST, blog);
     dispatch({ type: UPDATE_BLOG_SUCCESS });
   } catch (error) {
     dispatch({ type: UPDATE_BLOG_FAIL });

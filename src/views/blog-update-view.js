@@ -1,11 +1,12 @@
-import { html } from "@polymer/lit-element";
+import { html, LitElement } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
 
 import { store } from "../redux/store.js";
 import { updateBlog } from "../redux/actions.js";
-import { BaseView } from "../components/base-view";
+import { Router } from "@vaadin/router";
+import { ENDPOINT } from "../constants/endpoints";
 
-class BlogUpdate extends connect(store)(BaseView) {
+class BlogUpdate extends connect(store)(LitElement) {
   static get properties() {
     return {
       title: { type: String },
@@ -50,7 +51,7 @@ class BlogUpdate extends connect(store)(BaseView) {
         image: this.image,
       };
       store.dispatch(updateBlog(blog)).then(() => {
-        window.location.href = "http://localhost:8080/blogs";
+        Router.go(ENDPOINT.BLOG_LIST);
       });
     }
   }

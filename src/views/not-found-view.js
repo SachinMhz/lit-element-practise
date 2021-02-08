@@ -1,7 +1,5 @@
-import { html } from "lit-element";
-import { BaseView } from "../components/base-view.js";
-
-class NotFoundView extends BaseView {
+import { html, LitElement } from "@polymer/lit-element";
+class NotFoundView extends LitElement {
   render() {
     return html`
       <h1>View not found!</h1>

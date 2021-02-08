@@ -1,8 +1,10 @@
-import { html, LitElement } from "lit-element";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { logout } from "../redux/login-actions.js";
+import { ENDPOINT } from "../constants/endpoints.js";
 
 class NavBar extends connect(store)(LitElement) {
   static get properties() {
@@ -18,8 +20,7 @@ class NavBar extends connect(store)(LitElement) {
   }
 
   logout() {
-    store.dispatch(logout());
-    window.location.href = "http://localhost:8080/";
+    store.dispatch(logout()).then(() => Router.go(ENDPOINT.HOME));
   }
 
   render() {
@@ -27,11 +28,13 @@ class NavBar extends connect(store)(LitElement) {
     return html`
       <div style="background: rgb(42, 52, 67); padding: 12px 0px">
         ${!this.isLoggedIn
-          ? html`<a href="/" style=${style}>Log In</a>
-              <a href="/sign-in" style=${style}>Sign In</a>`
-          : html` <a href="/blogs" style=${style}>Blogs</a>
-              <a href="/create" style=${style}>Create</a>
-              <a href="/" style=${style} @click=${this.logout}>Logout</a>`}
+          ? html`<a href="${ENDPOINT.LOGIN}" .style="${style}">Log In</a>
+              <a href="${ENDPOINT.SIGNIN}" .style="${style}">Sign In</a>`
+          : html` <a href="${ENDPOINT.BLOG_LIST}" .style="${style}">Blogs</a>
+              <a href="${ENDPOINT.CREATE}" .style="${style}">Create</a>
+              <a href="${ENDPOINT.HOME}" .style="${style}" @click=${this.logout}
+                >Logout</a
+              >`}
       </div>
     `;
   }
