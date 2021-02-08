@@ -78,9 +78,9 @@ class BlogUpdate extends connect(store)(LitElement) {
             outlined
             label="Title"
             icon="title"
-            value=${this.title}
+            .value="${this.title}"
             placeholder="example@gmail.com"
-            @keyup=${this.titleChange}
+            @keyup="${this.titleChange}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -88,9 +88,9 @@ class BlogUpdate extends connect(store)(LitElement) {
             helperPersistent
             label="Image"
             icon="image"
-            value=${this.image}
+            .value="${this.image}"
             placeholder="example@gmail.com"
-            @keyup=${this.imageChange}
+            @keyup="${this.imageChange}"
           ></mwc-textfield>
           <mwc-textarea
             class="textfield"
@@ -98,16 +98,16 @@ class BlogUpdate extends connect(store)(LitElement) {
             rows="8"
             label="Description"
             icon="vpn_key"
-            value=${this.description}
-            @keyup=${this.descriptionChange}
+            .value="${this.description}"
+            @keyup="${this.descriptionChange}"
           ></mwc-textarea>
           ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
             class="button"
-            ?disabled=${this.title ? false : true}
+            ?disabled="${this.title ? false : true}"
             raised
-            label=${this.updateState ? "Updating ..." : "Update"}
-            @click=${this.updateBlog}
+            .label="${this.updateState ? "Updating ..." : "Update"}"
+            @click="${this.updateBlog}"
           ></mwc-button>
         </div>
       </div>

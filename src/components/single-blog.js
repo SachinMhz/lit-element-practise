@@ -1,15 +1,35 @@
 import { Router } from "@vaadin/router";
-import { html, LitElement } from "@polymer/lit-element";
+import { css, html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
-import { deleteBlog, fetchBlog } from "../redux/actions";
 import { ENDPOINT } from "../constants/endpoints";
+import { customStyles, singleBlogStyle } from "../style/custom-style";
+import { deleteBlog, fetchBlog } from "../redux/actions";
 
 class SingleBlog extends LitElement {
   static get properties() {
     return {
       blog: { type: Object },
     };
+  }
+
+  static get styles() {
+    return [
+      singleBlogStyle,
+      css`
+        a {
+          text-decoration: none;
+          color: black;
+        }
+      `,
+    ];
+  }
+
+  constructor() {
+    super();
+
+    this.editBlog = this.editBlog.bind(this);
+    this.deleteBlog = this.deleteBlog.bind(this);
   }
 
   deleteBlog(e) {
@@ -25,28 +45,6 @@ class SingleBlog extends LitElement {
 
   render() {
     return html`
-      <style>
-        a {
-          text-decoration: none;
-          color: black;
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-      </style>
       <a href=${`/blog?id=${this.blog.id}`}>
         <div
           class="single-blog"
@@ -80,13 +78,13 @@ class SingleBlog extends LitElement {
             class="button"
             raised
             label="Edit"
-            @click=${this.editBlog}
+            @click="${this.editBlog}"
           ></mwc-button>
           <mwc-button
             class="button"
             raised
             label="Delete"
-            @click=${this.deleteBlog}
+            @click="${this.deleteBlog}"
           ></mwc-button>
         </div>
       </a>

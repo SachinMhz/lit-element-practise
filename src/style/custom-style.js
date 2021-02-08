@@ -45,6 +45,14 @@ export const customStyles = css`
     border-radius: 4px;
     font-size: 13px;
   }
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  .blog-content {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const navBarStyle = css`
@@ -56,5 +64,24 @@ export const navBarStyle = css`
     font-size: 32px;
     color: white;
     margin: 0 20px;
+  }
+`;
+
+export const singleBlogStyle = css`
+  mwc-button {
+    --mdc-theme-primary: rgb(42, 52, 67);
+    --mdc-theme-on-primary: white;
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .container {
+    display: flex;
+    width: 40vw;
+    min-width: 300px;
+    align-items: center;
+    flex-direction: column;
   }
 `;

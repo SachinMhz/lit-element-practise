@@ -1,12 +1,17 @@
-import { html, LitElement } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
+import { customStyles } from "../style/custom-style";
 
 class BlogDetail extends connect(store)(LitElement) {
   constructor() {
     super();
     this.blog = { title: "", description: "", image: "", createDate: "" };
+  }
+
+  static get styles() {
+    return [customStyles];
   }
 
   stateChanged(state) {
@@ -19,12 +24,12 @@ class BlogDetail extends connect(store)(LitElement) {
     return html`
       <div>
         <h1>${this.blog.title}</h1>
-        <div style="display:flex; justify-content: space-between;">
+        <div class="user-info">
           <span>User: Sachin Maharjan</span
           ><span>Create Date: ${this.blog.createDate}</span>
         </div>
-        <div style="display:flex; justify-content: center;">
-          <img src=${this.blog.image} alt="City Image" />
+        <div class="blog-content">
+          <img .src="${this.blog.image}" alt="City Image" />
         </div>
         <p>${this.blog.description}</p>
       </div>

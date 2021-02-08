@@ -62,9 +62,9 @@ class LoginView extends connect(store)(LitElement) {
             outlined
             label="Email"
             icon="email"
-            value=${this.email}
+            .value="${this.email}"
             placeholder="example@gmail.com"
-            @keyup=${this.emailChange}
+            @keyup="${this.emailChange}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -72,17 +72,17 @@ class LoginView extends connect(store)(LitElement) {
             outlined
             label="Password"
             icon="vpn_key"
-            value=${this.password}
+            .value="${this.password}"
             type="password"
-            @keyup=${this.passwordChange}
+            @keyup="${this.passwordChange}"
           ></mwc-textfield>
           ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
             class="button"
-            ?disabled=${this.email && this.password ? false : true}
+            ?disabled="${this.email && this.password ? false : true}"
             raised
-            label=${this.loginStatus ? "Logging ..." : "Log in"}
-            @click=${this.login}
+            label="${this.loginStatus ? "Logging ..." : "Log in"}"
+            @click="${this.login}"
           ></mwc-button>
         </div>
       </div>

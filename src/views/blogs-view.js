@@ -27,7 +27,7 @@ class BlogsView extends connect(store)(LitElement) {
       <h1>List of blogs</h1>
       <div>
         ${this.blogs.map(
-          (blog) => html`<single-blog .blog=${blog}></single-blog>`
+          (blog) => html`<single-blog .blog="${blog}"></single-blog>`
         )}
       </div>
     `;
