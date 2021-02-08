@@ -1,12 +1,12 @@
+import moment from "moment";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
 import { html, LitElement } from "lit-element";
 
 import { store } from "../redux/store.js";
 import { addBlog } from "../redux/actions.js";
-
-import moment from "moment";
-import { Router } from "@vaadin/router";
 import { ENDPOINT } from "../constants/endpoints.js";
+import { customStyles } from "../style/custom-style.js";
 class BlogCreate extends connect(store)(LitElement) {
   static get properties() {
     return {
@@ -18,12 +18,21 @@ class BlogCreate extends connect(store)(LitElement) {
     };
   }
 
+  static get styles() {
+    return [customStyles];
+  }
+
   constructor() {
     super();
     this.title = "";
     this.description = "";
     this.image = "";
     this.createDate = "";
+
+    this.addBlog = this.addBlog.bind(this);
+    this.imageChange = this.imageChange.bind(this);
+    this.titleChange = this.titleChange.bind(this);
+    this.descriptionChange = this.descriptionChange.bind(this);
   }
 
   stateChanged(state) {
@@ -42,57 +51,19 @@ class BlogCreate extends connect(store)(LitElement) {
 
   addBlog(e) {
     e.preventDefault();
-    if (this.title && this.description) {
-      let blog = {
-        title: this.title,
-        description: this.description,
-        image: this.image,
-        createDate: moment().format("Do MMM YYYY"),
-      };
-      store.dispatch(addBlog(blog)).then(() => {
-        Router.go(ENDPOINT.BLOG_LIST);
-      });
-    }
+    let blog = {
+      title: this.title,
+      description: this.description,
+      image: this.image,
+      createDate: moment().format("Do MMM YYYY"),
+    };
+    store.dispatch(addBlog(blog)).then(() => {
+      Router.go(ENDPOINT.BLOG_LIST);
+    });
   }
 
   render() {
     return html`<div>
-      <style>
-        mwc-textfield {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-textarea {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-        .textfield {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .textarea {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .button {
-          margin-top: 15px;
-          width: 100%;
-        }
-      </style>
       <div class="wrapper">
         <h1>Create a new Blog</h1>
         <div class="container">

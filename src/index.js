@@ -6,7 +6,7 @@ import "@material/mwc-button";
 import "@material/mwc-textarea";
 import "@material/mwc-textfield";
 
-import "./styles.css";
+import "./style/styles.css";
 import "./views/blogs-view";
 import "./components/nav-bar";
 

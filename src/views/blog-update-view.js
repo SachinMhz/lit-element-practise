@@ -1,23 +1,35 @@
-import { html, LitElement } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { updateBlog } from "../redux/actions.js";
-import { Router } from "@vaadin/router";
 import { ENDPOINT } from "../constants/endpoints";
+import { customStyles } from "../style/custom-style.js";
 
 class BlogUpdate extends connect(store)(LitElement) {
   static get properties() {
     return {
       title: { type: String },
       image: { type: String },
+      blog: { type: Object },
       description: { type: String },
       updateState: { type: Boolean },
     };
   }
 
+  static get styles() {
+    return [customStyles];
+  }
+
   constructor() {
     super();
+    this.blog = { title: "", description: "", image: "", createDate: "" };
+
+    this.updateBlog = this.updateBlog.bind(this);
+    this.imageChange = this.imageChange.bind(this);
+    this.titleChange = this.titleChange.bind(this);
+    this.descriptionChange = this.descriptionChange.bind(this);
   }
 
   stateChanged(state) {
@@ -25,10 +37,11 @@ class BlogUpdate extends connect(store)(LitElement) {
     const id = urlParams.get("id");
     this.updateState = state.blog.updateLoading;
     this.blog = state.blog.blogs.find((blog) => blog.id == id);
+    console.log(this.blog);
 
-    this.title = this.blog.title;
-    this.description = this.blog.description;
-    this.image = this.blog.image;
+    this.title = this.blog?.title;
+    this.description = this.blog?.description;
+    this.image = this.blog?.image;
   }
 
   titleChange(e) {
@@ -43,57 +56,19 @@ class BlogUpdate extends connect(store)(LitElement) {
 
   updateBlog(e) {
     e.preventDefault();
-    if (this.title && this.description) {
-      let blog = {
-        id: this.blog.id,
-        title: this.title,
-        description: this.description,
-        image: this.image,
-      };
-      store.dispatch(updateBlog(blog)).then(() => {
-        Router.go(ENDPOINT.BLOG_LIST);
-      });
-    }
+    let blog = {
+      id: this.blog.id,
+      title: this.title,
+      description: this.description,
+      image: this.image,
+    };
+    store.dispatch(updateBlog(blog)).then(() => {
+      Router.go(ENDPOINT.BLOG_LIST);
+    });
   }
 
   render() {
     return html`<div>
-      <style>
-        mwc-textfield {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-textarea {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-        .textfield {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .textarea {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .button {
-          margin-top: 15px;
-          width: 100%;
-        }
-      </style>
       <div class="wrapper">
         <h1>Update Blog</h1>
         <div class="container">
@@ -103,7 +78,7 @@ class BlogUpdate extends connect(store)(LitElement) {
             outlined
             label="Title"
             icon="title"
-            value=${this.blog.title}
+            value=${this.title}
             placeholder="example@gmail.com"
             @keyup=${this.titleChange}
           ></mwc-textfield>
@@ -113,7 +88,7 @@ class BlogUpdate extends connect(store)(LitElement) {
             helperPersistent
             label="Image"
             icon="image"
-            value=${this.blog.image}
+            value=${this.image}
             placeholder="example@gmail.com"
             @keyup=${this.imageChange}
           ></mwc-textfield>
@@ -123,7 +98,7 @@ class BlogUpdate extends connect(store)(LitElement) {
             rows="8"
             label="Description"
             icon="vpn_key"
-            value=${this.blog.description}
+            value=${this.description}
             @keyup=${this.descriptionChange}
           ></mwc-textarea>
           ${this.error ? html`<div class="error">${this.error}</div>` : null}

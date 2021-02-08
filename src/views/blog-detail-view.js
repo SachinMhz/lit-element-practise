@@ -6,6 +6,7 @@ import { store } from "../redux/store";
 class BlogDetail extends connect(store)(LitElement) {
   constructor() {
     super();
+    this.blog = { title: "", description: "", image: "", createDate: "" };
   }
 
   stateChanged(state) {
@@ -20,7 +21,7 @@ class BlogDetail extends connect(store)(LitElement) {
         <h1>${this.blog.title}</h1>
         <div style="display:flex; justify-content: space-between;">
           <span>User: Sachin Maharjan</span
-          ><span>Create Date: 20th Jan 2021</span>
+          ><span>Create Date: ${this.blog.createDate}</span>
         </div>
         <div style="display:flex; justify-content: center;">
           <img src=${this.blog.image} alt="City Image" />

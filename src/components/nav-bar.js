@@ -5,6 +5,7 @@ import { html, LitElement } from "@polymer/lit-element";
 import { store } from "../redux/store.js";
 import { logout } from "../redux/login-actions.js";
 import { ENDPOINT } from "../constants/endpoints.js";
+import { navBarStyle } from "../style/custom-style.js";
 
 class NavBar extends connect(store)(LitElement) {
   static get properties() {
@@ -13,6 +14,10 @@ class NavBar extends connect(store)(LitElement) {
         type: Object,
       },
     };
+  }
+
+  static get styles() {
+    return [navBarStyle];
   }
 
   stateChanged(state) {
@@ -24,17 +29,14 @@ class NavBar extends connect(store)(LitElement) {
   }
 
   render() {
-    const style = "font-size:32px; color:white; margin:0 20px";
     return html`
-      <div style="background: rgb(42, 52, 67); padding: 12px 0px">
+      <div class="nav-bar-wrapper">
         ${!this.isLoggedIn
-          ? html`<a href="${ENDPOINT.LOGIN}" .style="${style}">Log In</a>
-              <a href="${ENDPOINT.SIGNIN}" .style="${style}">Sign In</a>`
-          : html` <a href="${ENDPOINT.BLOG_LIST}" .style="${style}">Blogs</a>
-              <a href="${ENDPOINT.CREATE}" .style="${style}">Create</a>
-              <a href="${ENDPOINT.HOME}" .style="${style}" @click=${this.logout}
-                >Logout</a
-              >`}
+          ? html`<a href="${ENDPOINT.LOGIN}">Log In</a>
+              <a href="${ENDPOINT.SIGNIN}">Sign In</a>`
+          : html` <a href="${ENDPOINT.BLOG_LIST}">Blogs</a>
+              <a href="${ENDPOINT.CREATE}">Create</a>
+              <a href="${ENDPOINT.HOME}" @click=${this.logout}>Logout</a>`}
       </div>
     `;
   }

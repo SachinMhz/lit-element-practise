@@ -5,6 +5,7 @@ import { html, LitElement } from "@polymer/lit-element";
 import { store } from "../redux/store.js";
 import { signin } from "../redux/login-actions.js";
 import { ENDPOINT } from "../constants/endpoints.js";
+import { customStyles } from "../style/custom-style.js";
 
 class SignInView extends connect(store)(LitElement) {
   static get properties() {
@@ -16,83 +17,52 @@ class SignInView extends connect(store)(LitElement) {
     };
   }
 
+  static get styles() {
+    return [customStyles];
+  }
+
   constructor() {
     super();
     this.email = "";
     this.password = "";
     this.name = "";
+
+    this.nameChange.bind(this);
+    this.emailChange.bind(this);
+    this.passwordChange.bind(this);
   }
 
   stateChanged(state) {
     this.error = state.login.loginError;
-    if (state.login.user) {
-      Router.go(ENDPOINT.BLOG_LIST);
-    }
   }
+
   nameChange(e) {
     this.name = e.target.value;
   }
+
   emailChange(e) {
     this.email = e.target.value;
   }
+
   passwordChange(e) {
     this.password = e.target.value;
   }
 
   signin(e) {
-    if (this.email && this.password) {
-      store.dispatch(signin(this.email, this.password)).then((res) => {
-        this.email = "";
-        this.password = "";
-      });
-    }
+    store.dispatch(signin(this.email, this.password)).then((res) => {
+      this.email = "";
+      this.password = "";
+      Router.go(ENDPOINT.BLOG_LIST);
+    });
   }
   render() {
     return html`
-      <style>
-        mwc-textfield {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .login-wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .login-container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-        .login-textfield {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .login-button {
-          margin-top: 15px;
-          width: 100%;
-        }
-        .login-error {
-          color: #a94442;
-          background-color: #f2dede;
-          border-color: #ebccd1;
-          padding: 15px;
-          margin-bottom: 20px;
-          border: 1px solid transparent;
-          border-radius: 4px;
-          font-size: 13px;
-        }
-      </style>
-      <div class="login-wrapper">
+     
+      <div class="wrapper">
         <h1>Create a new account</h1>
-        <div class="login-container">
+        <div class="container">
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             outlined
             label="Name"
             icon="person"
@@ -101,7 +71,7 @@ class SignInView extends connect(store)(LitElement) {
             @keyup=${this.nameChange}
           ></mwc-textfield>
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             required
             outlined
             label="Email"
@@ -111,7 +81,7 @@ class SignInView extends connect(store)(LitElement) {
             @keyup=${this.emailChange}
           ></mwc-textfield>
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             required
             outlined
             label="Password"
@@ -121,10 +91,10 @@ class SignInView extends connect(store)(LitElement) {
             @keyup=${this.passwordChange}
           ></mwc-textfield>
           ${this.error
-            ? html`<div class="login-error">${this.error}</div>`
+            ? html`<div class="error">${this.error}</div>`
             : null}
           <mwc-button
-            class="login-button"
+            class="button"
             ?disabled=${this.email && this.password ? false : true}
             raised
             label=${this.loginStatus ? "Signing ..." : "Sign in"}
