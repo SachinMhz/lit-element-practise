@@ -1,97 +1,54 @@
-import { html } from "@polymer/lit-element";
+import moment from "moment";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "lit-element";
 
 import { store } from "../redux/store.js";
 import { addBlog } from "../redux/actions.js";
-import { BaseView } from "../components/base-view";
+import { ENDPOINTS } from "../constants/endpoints.js";
+import { customStyles } from "../style/custom-style.js";
 
-import moment from "moment";
-class BlogCreate extends connect(store)(BaseView) {
+class BlogCreate extends connect(store)(LitElement) {
   static get properties() {
     return {
-      title: { type: String },
-      image: { type: String },
-      description: { type: String },
+      blog: { type: Object },
       addState: { type: Boolean },
-      createDate: { type: String },
     };
+  }
+
+  static get styles() {
+    return [customStyles];
   }
 
   constructor() {
     super();
-    this.title = "";
-    this.description = "";
-    this.image = "";
-    this.createDate = "";
+    this.blog = { title: "", description: "", image: "" };
+    this.addBlog = this.addBlog.bind(this);
+    this.blogContentChange = this.blogContentChange.bind(this);
   }
 
   stateChanged(state) {
     this.addState = state.blog.addLoading;
   }
 
-  titleChange(e) {
-    this.title = e.target.value;
-  }
-  imageChange(e) {
-    this.image = e.target.value;
-  }
-  descriptionChange(e) {
-    this.description = e.target.value;
+  blogContentChange(e, key) {
+    this.blog = { ...this.blog, [key]: e.target.value };
   }
 
   addBlog(e) {
     e.preventDefault();
-    if (this.title && this.description) {
-      let blog = {
-        title: this.title,
-        description: this.description,
-        image: this.image,
-        createDate: moment().format("Do MMM YYYY"),
-      };
-      store.dispatch(addBlog(blog)).then(() => {
-        window.location.href = "http://localhost:8080/blogs";
-      });
-    }
+    let blog = {
+      ...this.blog,
+      createDate: moment().format("Do MMM YYYY"),
+    };
+    store.dispatch(addBlog(blog)).then(() => {
+      Router.go(ENDPOINTS.BLOG_LIST);
+    });
   }
 
   render() {
+    const { title, description, image } = this.blog;
     return html`<div>
-      <style>
-        mwc-textfield {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-textarea {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-        .textfield {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .textarea {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .button {
-          margin-top: 15px;
-          width: 100%;
-        }
-      </style>
       <div class="wrapper">
         <h1>Create a new Blog</h1>
         <div class="container">
@@ -101,9 +58,9 @@ class BlogCreate extends connect(store)(BaseView) {
             outlined
             label="Title"
             icon="title"
-            value=${this.title}
+            .value="${title}"
             placeholder="example@gmail.com"
-            @keyup=${this.titleChange}
+            @keyup="${(e) => this.blogContentChange(e, "title")}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -111,9 +68,8 @@ class BlogCreate extends connect(store)(BaseView) {
             helperPersistent
             label="Image"
             icon="image"
-            value=${this.image}
-            placeholder="example@gmail.com"
-            @keyup=${this.imageChange}
+            .value="${image}"
+            @keyup="${(e) => this.blogContentChange(e, "image")}"
           ></mwc-textfield>
           <mwc-textarea
             class="textfield"
@@ -121,17 +77,17 @@ class BlogCreate extends connect(store)(BaseView) {
             rows="8"
             label="Description"
             icon="vpn_key"
-            value=${this.description}
+            .value="${description}"
             type="password"
-            @keyup=${this.descriptionChange}
+            @keyup="${(e) => this.blogContentChange(e, "description")}"
           ></mwc-textarea>
           ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
             class="button"
-            ?disabled=${this.title ? false : true}
+            ?disabled="${title ? false : true}"
             raised
-            label=${this.addState ? "Creating ..." : "Create"}
-            @click=${this.addBlog}
+            label="${this.addState ? "Creating ..." : "Create"}"
+            @click="${this.addBlog}"
           ></mwc-button>
         </div>
       </div>

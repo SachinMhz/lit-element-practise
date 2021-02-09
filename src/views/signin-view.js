@@ -1,133 +1,90 @@
-import { html } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { signin } from "../redux/login-actions.js";
-import { BaseView } from "../components/base-view";
+import { ENDPOINTS } from "../constants/endpoints.js";
+import { customStyles } from "../style/custom-style.js";
 
-class SignInView extends connect(store)(BaseView) {
+class SignInView extends connect(store)(LitElement) {
   static get properties() {
     return {
-      name: { type: String },
-      email: { type: String },
-      password: { type: String },
       error: { type: String },
+      credentials: { type: Object },
+      loadingStatus: { type: Boolean },
     };
+  }
+
+  static get styles() {
+    return [customStyles];
   }
 
   constructor() {
     super();
-    this.email = "";
-    this.password = "";
-    this.name = "";
+    this.credentials = { name: "", email: "", password: "" };
+    this.signin = this.signin.bind(this);
+    this.handleTextChange = this.handleTextChange(this);
   }
 
   stateChanged(state) {
     this.error = state.login.loginError;
-    if (state.login.user) {
-      window.location.href = "http://localhost:8080/blogs";
-    }
+    this.loadingStatus = state.login.loginLoading;
   }
-  nameChange(e) {
-    this.name = e.target.value;
-  }
-  emailChange(e) {
-    this.email = e.target.value;
-  }
-  passwordChange(e) {
-    this.password = e.target.value;
+
+  handleTextChange(e, key) {
+    this.credentials = { ...this.credentials, [key]: e.target.value };
   }
 
   signin(e) {
-    if (this.email && this.password) {
-      store.dispatch(signin(this.email, this.password)).then((res) => {
-        this.email = "";
-        this.password = "";
-      });
-    }
+    store.dispatch(signin(this.credentials)).then((res) => {
+      this.credentials = { name: "", email: "", password: "" };
+      Router.go(ENDPOINTS.BLOG_LIST);
+    });
   }
+
   render() {
+    const { email, password, name } = this.credentials;
     return html`
-      <style>
-        mwc-textfield {
-          --mdc-theme-primary: rgb(42, 52, 67);
-        }
-        mwc-button {
-          --mdc-theme-primary: rgb(42, 52, 67);
-          --mdc-theme-on-primary: white;
-        }
-        .login-wrapper {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-        }
-        .login-container {
-          display: flex;
-          width: 40vw;
-          min-width: 300px;
-          align-items: center;
-          flex-direction: column;
-        }
-        .login-textfield {
-          width: 100%;
-          padding: 10px 0;
-        }
-        .login-button {
-          margin-top: 15px;
-          width: 100%;
-        }
-        .login-error {
-          color: #a94442;
-          background-color: #f2dede;
-          border-color: #ebccd1;
-          padding: 15px;
-          margin-bottom: 20px;
-          border: 1px solid transparent;
-          border-radius: 4px;
-          font-size: 13px;
-        }
-      </style>
-      <div class="login-wrapper">
+      <div class="wrapper">
         <h1>Create a new account</h1>
-        <div class="login-container">
+        <div class="container">
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             outlined
             label="Name"
             icon="person"
-            value=${this.name}
+            .value="${name}"
             placeholder="Jhon Doe"
-            @keyup=${this.nameChange}
+            @keyup="${(e) => this.handleTextChange(e, "name")}"
           ></mwc-textfield>
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             required
             outlined
             label="Email"
             icon="email"
-            value=${this.email}
+            .value="${email}"
             placeholder="example@gmail.com"
-            @keyup=${this.emailChange}
+            @keyup="${(e) => this.handleTextChange(e, "email")}"
           ></mwc-textfield>
           <mwc-textfield
-            class="login-textfield"
+            class="textfield"
             required
             outlined
             label="Password"
             icon="vpn_key"
-            value=${this.password}
+            .value="${password}"
             type="password"
-            @keyup=${this.passwordChange}
+            @keyup="${(e) => this.handleTextChange(e, "password")}"
           ></mwc-textfield>
-          ${this.error
-            ? html`<div class="login-error">${this.error}</div>`
-            : null}
+          ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
-            class="login-button"
-            ?disabled=${this.email && this.password ? false : true}
+            class="button"
+            ?disabled="${email && password ? false : true}"
             raised
-            label=${this.loginStatus ? "Signing ..." : "Sign in"}
-            @click=${this.signin}
+            label="${this.loadingStatus ? "Signing ..." : "Sign in"}"
+            @click="${this.signin}"
           ></mwc-button>
         </div>
       </div>

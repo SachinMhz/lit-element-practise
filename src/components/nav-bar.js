@@ -1,8 +1,11 @@
-import { html, LitElement } from "lit-element";
 import { connect } from "pwa-helpers";
+import { Router } from "@vaadin/router";
+import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { logout } from "../redux/login-actions.js";
+import { ENDPOINTS } from "../constants/endpoints.js";
+import { navBarStyle } from "../style/custom-style.js";
 
 class NavBar extends connect(store)(LitElement) {
   static get properties() {
@@ -13,25 +16,27 @@ class NavBar extends connect(store)(LitElement) {
     };
   }
 
+  static get styles() {
+    return [navBarStyle];
+  }
+
   stateChanged(state) {
     this.isLoggedIn = state.login.user;
   }
 
   logout() {
-    store.dispatch(logout());
-    window.location.href = "http://localhost:8080/";
+    store.dispatch(logout()).then(() => Router.go(ENDPOINTS.HOME));
   }
 
   render() {
-    const style = "font-size:32px; color:white; margin:0 20px";
     return html`
-      <div style="background: rgb(42, 52, 67); padding: 12px 0px">
+      <div class="nav-bar-wrapper">
         ${!this.isLoggedIn
-          ? html`<a href="/" style=${style}>Log In</a>
-              <a href="/sign-in" style=${style}>Sign In</a>`
-          : html` <a href="/blogs" style=${style}>Blogs</a>
-              <a href="/create" style=${style}>Create</a>
-              <a href="/" style=${style} @click=${this.logout}>Logout</a>`}
+          ? html`<a href="${ENDPOINTS.LOGIN}">Log In</a>
+              <a href="${ENDPOINTS.SIGNIN}">Sign In</a>`
+          : html` <a href="${ENDPOINTS.BLOG_LIST}">Blogs</a>
+              <a href="${ENDPOINTS.CREATE}">Create</a>
+              <a href="${ENDPOINTS.HOME}" @click=${this.logout}>Logout</a>`}
       </div>
     `;
   }

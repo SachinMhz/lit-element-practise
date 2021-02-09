@@ -1,14 +1,35 @@
-import { html } from "@polymer/lit-element";
+import { Router } from "@vaadin/router";
+import { css, html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
+import { ENDPOINTS } from "../constants/endpoints";
+import { customStyles, singleBlogStyle } from "../style/custom-style";
 import { deleteBlog, fetchBlog } from "../redux/actions";
-import { BaseView } from "../components/base-view";
 
-class SingleBlog extends BaseView {
+class SingleBlog extends LitElement {
   static get properties() {
     return {
       blog: { type: Object },
     };
+  }
+
+  static get styles() {
+    return [
+      singleBlogStyle,
+      css`
+        a {
+          text-decoration: none;
+          color: black;
+        }
+      `,
+    ];
+  }
+
+  constructor() {
+    super();
+
+    this.editBlog = this.editBlog.bind(this);
+    this.deleteBlog = this.deleteBlog.bind(this);
   }
 
   deleteBlog(e) {
@@ -19,7 +40,7 @@ class SingleBlog extends BaseView {
 
   editBlog(e) {
     e.preventDefault();
-    window.location.href = "http://localhost:8080/update?id=" + this.blog.id;
+    Router.go(ENDPOINTS.UPDATE + "?id=" + this.blog.id);
   }
 
   render() {
@@ -53,8 +74,18 @@ class SingleBlog extends BaseView {
               />
             </div>
           </div>
-          <button @click=${this.editBlog}>Edit</button>
-          <button @click=${this.deleteBlog}>Delete</button>
+          <mwc-button
+            class="button"
+            raised
+            label="Edit"
+            @click="${this.editBlog}"
+          ></mwc-button>
+          <mwc-button
+            class="button"
+            raised
+            label="Delete"
+            @click="${this.deleteBlog}"
+          ></mwc-button>
         </div>
       </a>
     `;

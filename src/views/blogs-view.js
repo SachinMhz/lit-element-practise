@@ -1,13 +1,12 @@
-import { html } from "@polymer/lit-element";
+import { html, LitElement } from "@polymer/lit-element";
 import { connect } from "pwa-helpers";
 
 import "./blog-create-view";
 import "../components/single-blog";
 import { store } from "../redux/store";
 import { fetchBlog } from "../redux/actions";
-import { BaseView } from "../components/base-view";
 
-class BlogsView extends connect(store)(BaseView) {
+class BlogsView extends connect(store)(LitElement) {
   static get properties() {
     return {
       blogs: { type: Array },
@@ -28,7 +27,7 @@ class BlogsView extends connect(store)(BaseView) {
       <h1>List of blogs</h1>
       <div>
         ${this.blogs.map(
-          (blog) => html`<single-blog .blog=${blog}></single-blog>`
+          (blog) => html`<single-blog .blog="${blog}"></single-blog>`
         )}
       </div>
     `;
