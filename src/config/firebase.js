@@ -6,9 +6,9 @@ const _get = async (path) => {
     let DataRef = firebase.database().ref(path);
     let data = await (await DataRef.once("value")).val();
 
-    return Object.values(data);
+    return [...data];
   } catch (error) {
-    return error.errorMessage;
+    return Promise.reject(error);
   }
 };
 
@@ -36,7 +36,7 @@ const _delete = async (path, data) => {
   await firebase.database().ref(dataPath).remove();
 };
 
-const _signin = async (email, password) => {
+const _signin = async ({email, password}) => {
   try {
     const data = await firebase
       .auth()
@@ -44,11 +44,11 @@ const _signin = async (email, password) => {
 
     return data.user;
   } catch (error) {
-    return error.errorMessage;
+    return Promise.reject(error);
   }
 };
 
-const _login = async (email, password) => {
+const _login = async ({email, password}) => {
   try {
     const data = await firebase
       .auth()
@@ -56,7 +56,7 @@ const _login = async (email, password) => {
 
     return data.user;
   } catch (error) {
-    return error.errorMessage;
+    return Promise.reject(error);
   }
 };
 
@@ -66,7 +66,7 @@ const _signout = async () => {
 
     return true;
   } catch (error) {
-    return error.errorMessage;
+    return Promise.reject(error);
   }
 };
 

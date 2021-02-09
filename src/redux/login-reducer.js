@@ -17,16 +17,15 @@ const reducer = (state = INITIAL_STATE, action) => {
     case LOGGING_IN:
       return {
         ...state,
-        loginLoading: true,
         user: null,
         loginError: null,
+        loginLoading: true,
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         loginLoading: false,
         user: action.user,
-        loginError: null,
       };
     case LOGIN_FAIL:
       return {

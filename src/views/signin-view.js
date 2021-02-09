@@ -10,10 +10,9 @@ import { customStyles } from "../style/custom-style.js";
 class SignInView extends connect(store)(LitElement) {
   static get properties() {
     return {
-      name: { type: String },
-      email: { type: String },
-      password: { type: String },
       error: { type: String },
+      credentials: { type: Object },
+      loadingStatus: { type: Boolean },
     };
   }
 
@@ -23,41 +22,30 @@ class SignInView extends connect(store)(LitElement) {
 
   constructor() {
     super();
-    this.email = "";
-    this.password = "";
-    this.name = "";
-
-    this.nameChange.bind(this);
-    this.emailChange.bind(this);
-    this.passwordChange.bind(this);
+    this.credentials = { name: "", email: "", password: "" };
+    this.signin = this.signin.bind(this);
+    this.handleTextChange = this.handleTextChange(this);
   }
 
   stateChanged(state) {
     this.error = state.login.loginError;
+    this.loadingStatus = state.login.loginLoading;
   }
 
-  nameChange(e) {
-    this.name = e.target.value;
-  }
-
-  emailChange(e) {
-    this.email = e.target.value;
-  }
-
-  passwordChange(e) {
-    this.password = e.target.value;
+  handleTextChange(e, key) {
+    this.credentials = { ...this.credentials, [key]: e.target.value };
   }
 
   signin(e) {
-    store.dispatch(signin(this.email, this.password)).then((res) => {
-      this.email = "";
-      this.password = "";
+    store.dispatch(signin(this.credentials)).then((res) => {
+      this.credentials = { name: "", email: "", password: "" };
       Router.go(ENDPOINTS.BLOG_LIST);
     });
   }
+
   render() {
+    const { email, password, name } = this.credentials;
     return html`
-     
       <div class="wrapper">
         <h1>Create a new account</h1>
         <div class="container">
@@ -66,9 +54,9 @@ class SignInView extends connect(store)(LitElement) {
             outlined
             label="Name"
             icon="person"
-            .value="${this.name}"
+            .value="${name}"
             placeholder="Jhon Doe"
-            @keyup="${this.nameChange}"
+            @keyup="${(e) => this.handleTextChange(e, "name")}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -76,9 +64,9 @@ class SignInView extends connect(store)(LitElement) {
             outlined
             label="Email"
             icon="email"
-            .value="${this.email}"
+            .value="${email}"
             placeholder="example@gmail.com"
-            @keyup="${this.emailChange}"
+            @keyup="${(e) => this.handleTextChange(e, "email")}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -86,18 +74,16 @@ class SignInView extends connect(store)(LitElement) {
             outlined
             label="Password"
             icon="vpn_key"
-            .value="${this.password}"
+            .value="${password}"
             type="password"
-            @keyup="${this.passwordChange}"
+            @keyup="${(e) => this.handleTextChange(e, "password")}"
           ></mwc-textfield>
-          ${this.error
-            ? html`<div class="error">${this.error}</div>`
-            : null}
+          ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
             class="button"
-            ?disabled="${this.email && this.password ? false : true}"
+            ?disabled="${email && password ? false : true}"
             raised
-            label="${this.loginStatus ? "Signing ..." : "Sign in"}"
+            label="${this.loadingStatus ? "Signing ..." : "Sign in"}"
             @click="${this.signin}"
           ></mwc-button>
         </div>

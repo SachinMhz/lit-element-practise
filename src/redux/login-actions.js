@@ -6,40 +6,39 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (credentials) => async (dispatch) => {
   try {
     dispatch({ type: LOGGING_IN });
 
-    let user = await Fire._login(email, password);
+    let user = await Fire._login(credentials);
     dispatch({ type: LOGIN_SUCCESS, user });
 
     return Promise.resolve(user);
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL, error });
+    dispatch({ type: LOGIN_FAIL, error: error.message });
     return Promise.reject(error);
   }
 };
 
-export const signin = (email, password, name) => async (dispatch) => {
+export const signin = (credentials) => async (dispatch) => {
   try {
     dispatch({ type: LOGGING_IN });
 
-    let user = await Fire._signin(email, password, name);
+    let user = await Fire._signin(credentials);
     dispatch({ type: LOGIN_SUCCESS, user });
-    
+
     return Promise.resolve(user);
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL, error });
+    dispatch({ type: LOGIN_FAIL, error: error.message });
     return Promise.reject(error);
   }
 };
 
-export const logout = (email, password) => async (dispatch) => {
+export const logout = () => async (dispatch) => {
   try {
-    let user = await Fire._signout();
+    await Fire._signout();
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL, error });
-    console.log("login error", error);
+    dispatch({ type: LOGIN_FAIL, error: error.message });
   }
 };
