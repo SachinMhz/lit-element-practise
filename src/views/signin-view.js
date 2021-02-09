@@ -4,7 +4,7 @@ import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { signin } from "../redux/login-actions.js";
-import { ENDPOINT } from "../constants/endpoints.js";
+import { ENDPOINTS } from "../constants/endpoints.js";
 import { customStyles } from "../style/custom-style.js";
 
 class SignInView extends connect(store)(LitElement) {
@@ -52,7 +52,7 @@ class SignInView extends connect(store)(LitElement) {
     store.dispatch(signin(this.email, this.password)).then((res) => {
       this.email = "";
       this.password = "";
-      Router.go(ENDPOINT.BLOG_LIST);
+      Router.go(ENDPOINTS.BLOG_LIST);
     });
   }
   render() {

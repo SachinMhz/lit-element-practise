@@ -2,7 +2,7 @@ import { Router } from "@vaadin/router";
 import { css, html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
-import { ENDPOINT } from "../constants/endpoints";
+import { ENDPOINTS } from "../constants/endpoints";
 import { customStyles, singleBlogStyle } from "../style/custom-style";
 import { deleteBlog, fetchBlog } from "../redux/actions";
 
@@ -40,7 +40,7 @@ class SingleBlog extends LitElement {
 
   editBlog(e) {
     e.preventDefault();
-    Router.go(ENDPOINT.UPDATE + "?id=" + this.blog.id);
+    Router.go(ENDPOINTS.UPDATE + "?id=" + this.blog.id);
   }
 
   render() {

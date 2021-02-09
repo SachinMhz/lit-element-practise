@@ -4,7 +4,7 @@ import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { logout } from "../redux/login-actions.js";
-import { ENDPOINT } from "../constants/endpoints.js";
+import { ENDPOINTS } from "../constants/endpoints.js";
 import { navBarStyle } from "../style/custom-style.js";
 
 class NavBar extends connect(store)(LitElement) {
@@ -25,18 +25,18 @@ class NavBar extends connect(store)(LitElement) {
   }
 
   logout() {
-    store.dispatch(logout()).then(() => Router.go(ENDPOINT.HOME));
+    store.dispatch(logout()).then(() => Router.go(ENDPOINTS.HOME));
   }
 
   render() {
     return html`
       <div class="nav-bar-wrapper">
         ${!this.isLoggedIn
-          ? html`<a href="${ENDPOINT.LOGIN}">Log In</a>
-              <a href="${ENDPOINT.SIGNIN}">Sign In</a>`
-          : html` <a href="${ENDPOINT.BLOG_LIST}">Blogs</a>
-              <a href="${ENDPOINT.CREATE}">Create</a>
-              <a href="${ENDPOINT.HOME}" @click=${this.logout}>Logout</a>`}
+          ? html`<a href="${ENDPOINTS.LOGIN}">Log In</a>
+              <a href="${ENDPOINTS.SIGNIN}">Sign In</a>`
+          : html` <a href="${ENDPOINTS.BLOG_LIST}">Blogs</a>
+              <a href="${ENDPOINTS.CREATE}">Create</a>
+              <a href="${ENDPOINTS.HOME}" @click=${this.logout}>Logout</a>`}
       </div>
     `;
   }

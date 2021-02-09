@@ -5,16 +5,14 @@ import { html, LitElement } from "lit-element";
 
 import { store } from "../redux/store.js";
 import { addBlog } from "../redux/actions.js";
-import { ENDPOINT } from "../constants/endpoints.js";
+import { ENDPOINTS } from "../constants/endpoints.js";
 import { customStyles } from "../style/custom-style.js";
+
 class BlogCreate extends connect(store)(LitElement) {
   static get properties() {
     return {
-      title: { type: String },
-      image: { type: String },
-      description: { type: String },
+      blog: { type: Object },
       addState: { type: Boolean },
-      createDate: { type: String },
     };
   }
 
@@ -24,45 +22,32 @@ class BlogCreate extends connect(store)(LitElement) {
 
   constructor() {
     super();
-    this.title = "";
-    this.description = "";
-    this.image = "";
-    this.createDate = "";
-
+    this.blog = { title: "", description: "", image: "" };
     this.addBlog = this.addBlog.bind(this);
-    this.imageChange = this.imageChange.bind(this);
-    this.titleChange = this.titleChange.bind(this);
-    this.descriptionChange = this.descriptionChange.bind(this);
+    this.blogContentChange = this.blogContentChange.bind(this);
   }
 
   stateChanged(state) {
     this.addState = state.blog.addLoading;
   }
 
-  titleChange(e) {
-    this.title = e.target.value;
-  }
-  imageChange(e) {
-    this.image = e.target.value;
-  }
-  descriptionChange(e) {
-    this.description = e.target.value;
+  blogContentChange(e, key) {
+    this.blog = { ...this.blog, [key]: e.target.value };
   }
 
   addBlog(e) {
     e.preventDefault();
     let blog = {
-      title: this.title,
-      description: this.description,
-      image: this.image,
+      ...this.blog,
       createDate: moment().format("Do MMM YYYY"),
     };
     store.dispatch(addBlog(blog)).then(() => {
-      Router.go(ENDPOINT.BLOG_LIST);
+      Router.go(ENDPOINTS.BLOG_LIST);
     });
   }
 
   render() {
+    const { title, description, image } = this.blog;
     return html`<div>
       <div class="wrapper">
         <h1>Create a new Blog</h1>
@@ -73,9 +58,9 @@ class BlogCreate extends connect(store)(LitElement) {
             outlined
             label="Title"
             icon="title"
-            .value="${this.title}"
+            .value="${title}"
             placeholder="example@gmail.com"
-            @keyup="${this.titleChange}"
+            @keyup="${(e) => this.blogContentChange(e, "title")}"
           ></mwc-textfield>
           <mwc-textfield
             class="textfield"
@@ -83,9 +68,8 @@ class BlogCreate extends connect(store)(LitElement) {
             helperPersistent
             label="Image"
             icon="image"
-            .value="${this.image}"
-            placeholder="example@gmail.com"
-            @keyup="${this.imageChange}"
+            .value="${image}"
+            @keyup="${(e) => this.blogContentChange(e, "image")}"
           ></mwc-textfield>
           <mwc-textarea
             class="textfield"
@@ -93,14 +77,14 @@ class BlogCreate extends connect(store)(LitElement) {
             rows="8"
             label="Description"
             icon="vpn_key"
-            .value="${this.description}"
+            .value="${description}"
             type="password"
-            @keyup="${this.descriptionChange}"
+            @keyup="${(e) => this.blogContentChange(e, "description")}"
           ></mwc-textarea>
           ${this.error ? html`<div class="error">${this.error}</div>` : null}
           <mwc-button
             class="button"
-            ?disabled="${this.title ? false : true}"
+            ?disabled="${title ? false : true}"
             raised
             label="${this.addState ? "Creating ..." : "Create"}"
             @click="${this.addBlog}"

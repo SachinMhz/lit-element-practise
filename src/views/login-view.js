@@ -4,7 +4,7 @@ import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
 import { login } from "../redux/login-actions.js";
-import { ENDPOINT } from "../constants/endpoints.js";
+import { ENDPOINTS } from "../constants/endpoints.js";
 import { customStyles } from "../style/custom-style.js";
 
 class LoginView extends connect(store)(LitElement) {
@@ -47,7 +47,7 @@ class LoginView extends connect(store)(LitElement) {
     store.dispatch(login(this.email, this.password)).then((res) => {
       this.email = "";
       this.password = "";
-      Router.go(ENDPOINT.BLOG_LIST);
+      Router.go(ENDPOINTS.BLOG_LIST);
     });
   }
 

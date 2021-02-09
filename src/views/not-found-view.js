@@ -1,4 +1,5 @@
 import { html, LitElement } from "@polymer/lit-element";
+
 class NotFoundView extends LitElement {
   render() {
     return html`
