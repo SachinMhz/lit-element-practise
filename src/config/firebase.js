@@ -6,7 +6,7 @@ const _get = async (path) => {
     let DataRef = firebase.database().ref(path);
     let data = await (await DataRef.once("value")).val();
 
-    return [...data];
+    return data;
   } catch (error) {
     return Promise.reject(error);
   }
@@ -36,7 +36,7 @@ const _delete = async (path, data) => {
   await firebase.database().ref(dataPath).remove();
 };
 
-const _signin = async ({email, password}) => {
+const _signin = async ({ email, password }) => {
   try {
     const data = await firebase
       .auth()
@@ -48,7 +48,7 @@ const _signin = async ({email, password}) => {
   }
 };
 
-const _login = async ({email, password}) => {
+const _login = async ({ email, password }) => {
   try {
     const data = await firebase
       .auth()
@@ -70,6 +70,69 @@ const _signout = async () => {
   }
 };
 
+const _post_withImage = async (path, blog, imageBlob) => {
+  try {
+    const trimTitle = blog.title.slice(0, 10);
+    const ref = firebase
+      .storage()
+      .ref("Blog-images")
+      .child(trimTitle + "_" + new Date().getTime() + "");
+
+    const task = ref.put(imageBlob);
+
+    task.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      },
+      (error) => {
+        console.log("error", error);
+        return error;
+      },
+      (result) => {
+        task.snapshot.ref.getDownloadURL().then(function (imageURL) {
+          blog.image = imageURL;
+          _post(path, blog);
+        });
+        return result;
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const _put_withImage = async (path, blog, imageBlob) => {
+  try {
+    const trimTitle = blog.title.slice(0, 10);
+    const ref = firebase
+      .storage()
+      .ref("Blog-images")
+      .child(trimTitle + "_" + new Date().getTime() + "");
+
+    const task = ref.put(imageBlob);
+
+    task.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) =>
+        console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
+      (error) => {
+        console.log("error", error);
+        return error;
+      },
+      (result) => {
+        task.snapshot.ref.getDownloadURL().then(function (imageURL) {
+          blog.image = imageURL;
+          _put(path, blog);
+        });
+        return result;
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const Fire = {
   _get,
   _post,
@@ -78,6 +141,8 @@ const Fire = {
   _login,
   _signin,
   _signout,
+  _put_withImage,
+  _post_withImage,
 };
 
 export default Fire;
