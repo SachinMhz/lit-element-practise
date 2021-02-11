@@ -11,10 +11,25 @@ import { customStyles } from "../style/custom-style.js";
 class BlogUpdate extends connect(store)(LitElement) {
   static get properties() {
     return {
+      /**
+       * Metadata contains the properties of blog.
+       *
+       * @type {{name: String, description: String, createDate: String}}
+       */
       blog: { type: Object },
-      description: { type: String },
+
+      /** Whether updating to database is complete.
+       *
+       * @type {Boolean}
+       */
       updateState: { type: Boolean },
-      imageBlob: { type: Object },
+
+      /**
+       * Selected image from the file picker
+       *
+       * @type {File}
+       */
+      imageBlob: { type: File },
     };
   }
 
@@ -57,7 +72,6 @@ class BlogUpdate extends connect(store)(LitElement) {
   }
 
   render() {
-    console.log("render");
     const { title, description, image } = this.blog;
     return html`<div>
       <div class="wrapper">

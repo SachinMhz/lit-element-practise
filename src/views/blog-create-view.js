@@ -11,9 +11,25 @@ import { customStyles } from "../style/custom-style.js";
 class BlogCreate extends connect(store)(LitElement) {
   static get properties() {
     return {
+      /**
+       * Metadata contains the properties of blog.
+       *
+       * @type {{name: String, description: String,}}
+       */
       blog: { type: Object },
+
+      /** Whether adding to database is complete.
+       *
+       * @type {Boolean}
+       */
       addState: { type: Boolean },
-      imageBlob: { type: Object },
+
+      /**
+       * Selected image from the file picker
+       * 
+       * @type {File}
+       */
+      imageBlob: { type: File },
     };
   }
 
@@ -80,6 +96,7 @@ class BlogCreate extends connect(store)(LitElement) {
             accept="image/*"
             @files-changed="${(file) => {
               this.imageBlob = file.detail.value[0];
+              console.log(this.imageBlob);
             }}"
           ></paper-input-file>
           <mwc-button

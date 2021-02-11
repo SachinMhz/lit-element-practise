@@ -21,6 +21,12 @@ export const DELETING_BLOG = "DELETING_BLOG";
 export const DELETE_BLOG_FAIL = "DELETE_BLOG_FAIL";
 export const DELETE_BLOG_SUCCESS = "DELETE_BLOG_SUCCESS";
 
+/**
+ * Retrive single blog from firebase
+ *
+ * @param {String} id - ID of the blog
+ * @returns {Promise} Promise object represents boolean value
+ */
 export const fetchBlog = (id) => async (dispatch) => {
   try {
     dispatch({ type: FETCHING_BLOG });
@@ -28,24 +34,42 @@ export const fetchBlog = (id) => async (dispatch) => {
     let response = await Fire._get(ENDPOINTS.BLOG_LIST + "/" + id);
 
     dispatch({ type: FETCH_BLOG_SUCCESS, blog: response });
+    return Promise.resolve(true);
   } catch (error) {
     dispatch({ type: FETCH_BLOG_FAIL });
     console.log("fetch error", error);
+    return Promise.resolve(false);
   }
 };
 
+/**
+ * Retrive list of blogs from firebase
+ * @returns {Promise} Promise object represents boolean value
+ */
 export const fetchBlogList = () => async (dispatch) => {
   try {
     dispatch({ type: FETCHING_BLOG_LIST });
 
     let response = await Fire._get(ENDPOINTS.BLOG_LIST);
     dispatch({ type: FETCH_BLOG_LIST_SUCCESS, blogs: Object.values(response) });
+    return Promise.resolve(true);
   } catch (error) {
     dispatch({ type: FETCH_BLOG_LIST_FAIL });
     console.log("fetch error", error);
+    return Promise.resolve(false);
   }
 };
 
+/**
+ * Add blog to firebase
+ *
+ * @param {Object} blog - Blog
+ * @param {string} blog.title - Title of the blog
+ * @param {string} blog.desription - Description of the blog
+ * @param {string} blog.createDate - Created Date of the blog
+ * @param {File} [imageBlob] - Image file
+ * @returns {Promise} Promise object represents boolean value
+ */
 export const addBlog = (blog, imageBlob) => async (dispatch) => {
   try {
     dispatch({ type: ADDING_BLOG });
@@ -63,18 +87,40 @@ export const addBlog = (blog, imageBlob) => async (dispatch) => {
   }
 };
 
+/**
+ * Delete the blog from firebase
+ *
+ * @param {Object} blog - Blog
+ * @param {string} blog.id - Title of the blog
+ * @returns {Promise} Promise object represents boolean value
+ */
 export const deleteBlog = (blog) => async (dispatch) => {
   try {
     dispatch({ type: DELETING_BLOG });
 
     await Fire._delete(ENDPOINTS.BLOG_LIST, blog);
     dispatch({ type: DELETE_BLOG_SUCCESS });
+    return Promise.resolve(true);
   } catch (error) {
     dispatch({ type: DELETE_BLOG_FAIL });
     console.log("delete error", error);
+    return Promise.resolve(false);
   }
 };
 
+/**
+ * Update the blog from firebase
+ *
+ * @param {Object} blog - Blog
+ * @param {string} blog.id - ID of the blog
+ * @param {string} blog.title - Title of the blog
+ * @param {string} blog.desription - Description of the blog
+ * @param {string} blog.image - ImageUrl of image for the blog
+ * @param {string} blog.createDate - Created Date of the blog
+ * @param {string} blog.updateDate - Updated Date of the blog
+ * @param {File} [imageBlob] - Image file
+ * @returns {Promise} Promise object represents boolean value
+ */
 export const updateBlog = (blog, imageBlob) => async (dispatch) => {
   try {
     dispatch({ type: UPDATING_BLOG });
@@ -84,8 +130,10 @@ export const updateBlog = (blog, imageBlob) => async (dispatch) => {
       : await Fire._put(ENDPOINTS.BLOG_LIST, blog);
 
     dispatch({ type: UPDATE_BLOG_SUCCESS });
+    return Promise.resolve(true);
   } catch (error) {
     dispatch({ type: UPDATE_BLOG_FAIL });
     console.log("update error", error);
+    return Promise.resolve(false);
   }
 };

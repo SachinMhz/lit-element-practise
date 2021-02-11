@@ -5,7 +5,6 @@ import "@material/mwc-icon";
 import "@material/mwc-button";
 import "@material/mwc-textarea";
 import "@material/mwc-textfield";
-import "@vaadin/vaadin-upload";
 
 import '@fluidnext-polymer/paper-input-file/paper-input-file';
 import '@fluidnext-polymer/paper-input-file/icons/paper-input-file-icons.js';
