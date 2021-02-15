@@ -3,8 +3,8 @@ import { css, html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store";
 import { ENDPOINTS } from "../constants/endpoints";
+import { deleteBlog, fetchBlog } from "../redux/blog-actions";
 import { customStyles, singleBlogStyle } from "../style/custom-style";
-import { deleteBlog, fetchBlog } from "../redux/actions";
 
 class SingleBlog extends LitElement {
   static get properties() {

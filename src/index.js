@@ -6,6 +6,9 @@ import "@material/mwc-button";
 import "@material/mwc-textarea";
 import "@material/mwc-textfield";
 
+import '@fluidnext-polymer/paper-input-file/paper-input-file';
+import '@fluidnext-polymer/paper-input-file/icons/paper-input-file-icons.js';
+
 import "./style/styles.css";
 import "./views/blogs-view";
 import "./components/nav-bar";

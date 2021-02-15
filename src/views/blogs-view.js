@@ -4,7 +4,7 @@ import { connect } from "pwa-helpers";
 import "./blog-create-view";
 import "../components/single-blog";
 import { store } from "../redux/store";
-import { fetchBlog } from "../redux/actions";
+import { fetchBlogList } from "../redux/blog-actions";
 
 class BlogsView extends connect(store)(LitElement) {
   static get properties() {
@@ -15,7 +15,7 @@ class BlogsView extends connect(store)(LitElement) {
 
   connectedCallback() {
     super.connectedCallback();
-    store.dispatch(fetchBlog());
+    store.dispatch(fetchBlogList());
   }
 
   stateChanged(state) {

@@ -6,6 +6,14 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
+/**
+ * login user to the app
+ *
+ * @param {Object} credentials - Credentials of the user
+ * @param {string} credentials.email - Email of the user
+ * @param {string} credentials.password - Password of the user
+ * @returns - Information about the user.
+ */
 export const login = (credentials) => async (dispatch) => {
   try {
     dispatch({ type: LOGGING_IN });
@@ -20,6 +28,14 @@ export const login = (credentials) => async (dispatch) => {
   }
 };
 
+/**
+ * create new user account in firebase
+ *
+ * @param {Object} credentials - Credentials of the user
+ * @param {string} credentials.email - Email of the user
+ * @param {string} credentials.password - Password of the user
+ * @returns - Information about the user.
+ */
 export const signin = (credentials) => async (dispatch) => {
   try {
     dispatch({ type: LOGGING_IN });
@@ -34,6 +50,9 @@ export const signin = (credentials) => async (dispatch) => {
   }
 };
 
+/**
+ * logs user out of the app
+ */
 export const logout = () => async (dispatch) => {
   try {
     await Fire._signout();

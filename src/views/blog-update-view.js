@@ -4,19 +4,32 @@ import { Router } from "@vaadin/router";
 import { html, LitElement } from "@polymer/lit-element";
 
 import { store } from "../redux/store.js";
-import { updateBlog } from "../redux/actions.js";
+import { fetchBlog, updateBlog } from "../redux/blog-actions.js";
 import { ENDPOINTS } from "../constants/endpoints";
 import { customStyles } from "../style/custom-style.js";
 
 class BlogUpdate extends connect(store)(LitElement) {
   static get properties() {
     return {
-      title: { type: String },
-      image: { type: String },
+      /**
+       * Metadata contains the properties of blog.
+       *
+       * @type {{name: String, description: String, createDate: String}}
+       */
       blog: { type: Object },
-      description: { type: String },
+
+      /** Whether updating to database is complete.
+       *
+       * @type {Boolean}
+       */
       updateState: { type: Boolean },
-      blog: { type: Object },
+
+      /**
+       * Selected image from the file picker
+       *
+       * @type {File}
+       */
+      imageBlob: { type: File },
     };
   }
 
@@ -26,15 +39,22 @@ class BlogUpdate extends connect(store)(LitElement) {
 
   constructor() {
     super();
-    this.blog = { title: "", description: "", image: "", createDate: "" };
+    this.imageBlob = null;
+    this.blog = { title: "", description: "", createDate: "" };
     this.blogContentChange = this.blogContentChange.bind(this);
   }
 
-  stateChanged(state) {
+  connectedCallback() {
+    super.connectedCallback();
+
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
+    store.dispatch(fetchBlog(id));
+  }
+
+  stateChanged(state) {
+    this.blog = state.blog.blog;
     this.updateState = state.blog.updateLoading;
-    this.blog = state.blog.blogs.find((blog) => blog.id == id);
   }
 
   blogContentChange(e, key) {
@@ -46,7 +66,7 @@ class BlogUpdate extends connect(store)(LitElement) {
       ...this.blog,
       updateDate: moment().format("Do MMM YYYY"),
     };
-    store.dispatch(updateBlog(blog)).then(() => {
+    store.dispatch(updateBlog(blog, this.imageBlob)).then(() => {
       Router.go(ENDPOINTS.BLOG_LIST);
     });
   }
@@ -67,15 +87,6 @@ class BlogUpdate extends connect(store)(LitElement) {
             placeholder="example@gmail.com"
             @keyup="${(e) => this.blogContentChange(e, "title")}"
           ></mwc-textfield>
-          <mwc-textfield
-            class="textfield"
-            outlined
-            helperPersistent
-            label="Image"
-            icon="image"
-            .value="${image}"
-            @keyup="${(e) => this.blogContentChange(e, "image")}"
-          ></mwc-textfield>
           <mwc-textarea
             class="textfield"
             outlined
@@ -85,7 +96,13 @@ class BlogUpdate extends connect(store)(LitElement) {
             .value="${description}"
             @keyup="${(e) => this.blogContentChange(e, "description")}"
           ></mwc-textarea>
-          ${this.error ? html`<div class="error">${this.error}</div>` : null}
+          <paper-input-file
+            label="Change Image"
+            accept="image/*"
+            @files-changed="${(file) => {
+              this.imageBlob = file.detail.value[0];
+            }}"
+          ></paper-input-file>
           <mwc-button
             class="button"
             ?disabled="${title ? false : true}"
