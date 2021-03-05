@@ -91,14 +91,14 @@ class BlogCreate extends connect(store)(LitElement) {
             type="password"
             @keyup="${(e) => this.blogContentChange(e, "description")}"
           ></mwc-textarea>
-          <paper-input-file
+          <!-- <paper-input-file
             label="Select Image"
             accept="image/*"
             @files-changed="${(file) => {
               this.imageBlob = file.detail.value[0];
               console.log(this.imageBlob);
             }}"
-          ></paper-input-file>
+          ></paper-input-file> -->
           <mwc-button
             class="button"
             ?disabled="${title ? false : true}"

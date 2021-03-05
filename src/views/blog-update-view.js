@@ -96,13 +96,13 @@ class BlogUpdate extends connect(store)(LitElement) {
             .value="${description}"
             @keyup="${(e) => this.blogContentChange(e, "description")}"
           ></mwc-textarea>
-          <paper-input-file
+          <!-- <paper-input-file
             label="Change Image"
             accept="image/*"
             @files-changed="${(file) => {
               this.imageBlob = file.detail.value[0];
             }}"
-          ></paper-input-file>
+          ></paper-input-file> -->
           <mwc-button
             class="button"
             ?disabled="${title ? false : true}"

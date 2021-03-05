@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@fluidnext-polymer/paper-input-file": "^3.1.0",
+    "@nurixinc/delphi_lf_common_frontend": "github:NurixInc/Delphi_LF_Common_Frontend#2.11.6",
     "@material/mwc-button": "^0.20.0",
     "@material/mwc-dialog": "^0.20.0",
     "@material/mwc-icon": "^0.20.0",
